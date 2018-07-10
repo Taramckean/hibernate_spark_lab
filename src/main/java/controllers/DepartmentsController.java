@@ -19,7 +19,7 @@ public class DepartmentsController {
 	}
 
 	private void departmentEndPoints() {
-		get("/departments", (res,req) -> {
+		get("/departments", (req,res) -> {
 			HashMap<String, Object> model = new HashMap<>();
 			List<Department> departments = DBHelper.getAll(Department.class);
 			model.put("departments", departments);
@@ -27,7 +27,7 @@ public class DepartmentsController {
 			return new ModelAndView(model, "templates/layout.vtl");
 		}, new VelocityTemplateEngine());
 
-		get("/departments/new", (res, req) -> {
+		get("/departments/new", (req, res) -> {
 			HashMap<String, Object> model = new HashMap<>();
 			List<Department> departments = DBHelper.getAll(Department.class);
 			model.put("departments", departments);
@@ -48,7 +48,7 @@ public class DepartmentsController {
 			HashMap<String, Object> model = new HashMap<>();
 			int departmentId = Integer.parseInt(req.params(":id"));
 			Department specificDepartment = DBHelper.find(departmentId, Department.class);
-			model.put("departments", specificDepartment);
+			model.put("department", specificDepartment);
 			model.put("template", "templates/departments/edit.vtl");
 			return new ModelAndView(model, "templates/layout.vtl");
 		}, new VelocityTemplateEngine());
@@ -57,10 +57,10 @@ public class DepartmentsController {
 			int departmentId = Integer.parseInt(req.params(":id"));
 			Department updatedDepartment = DBHelper.find(departmentId, Department.class);
 
-			String title = req.queryParams("title");
+			String titleName = req.queryParams("title");
 
-			updatedDepartment.setTitle(title);
-			DBHelper.save(title);
+			updatedDepartment.setTitle(titleName);
+			DBHelper.save(updatedDepartment);
 
 			res.redirect("/departments");
 			return null;
