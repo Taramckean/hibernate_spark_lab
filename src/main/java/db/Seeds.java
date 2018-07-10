@@ -16,6 +16,10 @@ public class Seeds {
 		DBHelper.save(department1);
 		Department department2 = new Department("IT");
 		DBHelper.save(department2);
+		Department department3 = new Department("Torture");
+		DBHelper.save(department3);
+		Department department4 = new Department("Hell");
+		DBHelper.save(department4);
 		Manager manager = new Manager("Peter", "Griffin", 40000,department1, 100000 );
 		DBHelper.save(manager);
 		Manager manager2 = new Manager("Homer", "Simpson", 20,department1, 2000 );

@@ -1,0 +1,12 @@
+<p class="pageHeader">Update Department</p>
+
+<form action="/departments/edit/$department.getId()" method="post">
+    <label for="title">First Name:</label>
+    <input type="text" class="inputBox" name="title" required="true" id="title" value="department.getTitle()"/>
+
+    <input type="submit" value="Save" class="button"/>
+
+</form>
+
+<form action="/departments/delete/$department.getId()" method="post">
+    <input type="submit" value="Delete" class="button"/>Delete Department</form>

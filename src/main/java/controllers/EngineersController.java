@@ -4,7 +4,7 @@ import com.sun.xml.internal.ws.api.pipe.Engine;
 import db.DBHelper;
 import models.Department;
 import models.Engineer;
-import models.Manager;
+import models.Engineer;
 import spark.ModelAndView;
 import spark.route.HttpMethod;
 import spark.template.velocity.VelocityTemplateEngine;
@@ -59,11 +59,11 @@ public class EngineersController {
 		get("/engineers/:id", (req, res) -> {
 			HashMap<String, Object> model = new HashMap<>();
 			int EngineerId = Integer.parseInt(req.params(":id"));
-			Manager specificEngineer = DBHelper.find(EngineerId, Engineer.class);
+			Engineer specificEngineer = DBHelper.find(EngineerId, Engineer.class);
 
 			List<Department> departments = DBHelper.getAll(Department.class);
 			model.put("departments", departments);
-			model.put("manager", specificEngineer);
+			model.put("engineer", specificEngineer);
 			model.put("template", "templates/engineers/edit.vtl");
 			return new ModelAndView(model, "templates/layout.vtl");
 		}, new VelocityTemplateEngine());
@@ -71,7 +71,7 @@ public class EngineersController {
 		post("/engineers/edit/:id", (req, res) -> {
 
 			int engineerId = Integer.parseInt(req.params(":id"));
-			Manager updatedEngineer = DBHelper.find(engineerId, Engineer.class);
+			Engineer updatedEngineer = DBHelper.find(engineerId, Engineer.class);
 
 			int departmentId = Integer.parseInt(req.queryParams("department"));
 			Department department = DBHelper.find(departmentId, Department.class);
@@ -92,6 +92,16 @@ public class EngineersController {
 			res.redirect("/engineers");
 			return null;
 
+		}, new VelocityTemplateEngine());
+
+		post("/engineers/delete/:id", (req,res) -> {
+			int engineerId = Integer.parseInt(req.params(":id"));
+
+			Engineer engineerToBeDeleted = DBHelper.find(engineerId, Engineer.class);
+
+			DBHelper.delete(engineerToBeDeleted);
+			res.redirect("/engineers");
+			return null;
 		}, new VelocityTemplateEngine());
 
 	}

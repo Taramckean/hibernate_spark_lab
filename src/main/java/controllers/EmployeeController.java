@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import static spark.Spark.get;
-import static spark.route.HttpMethod.get;
 
 public class EmployeeController {
 	public static void main(String[] args) {
 		ManagersController managersController = new ManagersController();
 		EngineersController engineersController = new EngineersController();
+		DepartmentsController departmentsController = new DepartmentsController();
 		Seeds.seedData();
 
 		get("/employees", (res, req) -> {
