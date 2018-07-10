@@ -4,8 +4,9 @@ import db.DBHelper;
 import models.Department;
 import models.Manager;
 import spark.ModelAndView;
-import spark.route.HttpMethod;
+
 import spark.template.velocity.VelocityTemplateEngine;
+import sun.security.pkcs11.Secmod;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +45,7 @@ public class ManagersController {
 			String firstName = req.queryParams("firstName");
 			String lastName = req.queryParams("lastName");
 			int salary = Integer.parseInt(req.queryParams("salary"));
-			int budget = Integer.parseInt(req.queryParams("budget"));
+			Double budget = Double.parseDouble(req.queryParams("budget"));
 
 			Manager newManager = new Manager(firstName, lastName, salary, department,budget);
 			DBHelper.save(newManager);
@@ -53,6 +54,58 @@ public class ManagersController {
 			return null;
 
 		}, new VelocityTemplateEngine());
+
+		get("/managers/:id", (req, res) -> {
+			HashMap<String, Object> model = new HashMap<>();
+			int managerId = Integer.parseInt(req.params(":id"));
+			Manager specificManager = DBHelper.find(managerId, Manager.class);
+
+			List<Department> departments = DBHelper.getAll(Department.class);
+			model.put("departments", departments);
+			model.put("manager", specificManager);
+			model.put("template", "templates/managers/edit.vtl");
+			return new ModelAndView(model, "templates/layout.vtl");
+		}, new VelocityTemplateEngine());
+
+
+		post("/managers/edit/:id", (req, res) -> {
+
+			int managerId = Integer.parseInt(req.params(":id"));
+			Manager updatedManager = DBHelper.find(managerId, Manager.class);
+
+			int departmentId = Integer.parseInt(req.queryParams("department"));
+			Department department = DBHelper.find(departmentId, Department.class);
+
+
+			String firstName = req.queryParams("firstName");
+			String lastName = req.queryParams("lastName");
+			int salary = Integer.parseInt(req.queryParams("salary"));
+			double budget = Double.parseDouble(req.queryParams("budget"));
+
+			updatedManager.setFirstName(firstName);
+			updatedManager.setLastName(lastName);
+			updatedManager.setDepartment(department);
+			updatedManager.setSalary(salary);
+			updatedManager.setBudget(budget);
+
+			DBHelper.save(updatedManager);
+
+			res.redirect("/managers");
+			return null;
+
+		}, new VelocityTemplateEngine());
+
+		post("/managers/delete/:id", (req,res) -> {
+			int managerId = Integer.parseInt(req.params(":id"));
+
+			Manager managerToBeDeleted = DBHelper.find(managerId, Manager.class);
+
+			DBHelper.delete(managerToBeDeleted);
+			res.redirect("/managers");
+			return null;
+		}, new VelocityTemplateEngine());
+
+
 
 
 	}
