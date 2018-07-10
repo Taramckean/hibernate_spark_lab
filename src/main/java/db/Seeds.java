@@ -18,9 +18,15 @@ public class Seeds {
 		DBHelper.save(department2);
 		Manager manager = new Manager("Peter", "Griffin", 40000,department1, 100000 );
 		DBHelper.save(manager);
+		Manager manager2 = new Manager("Homer", "Simpson", 20,department1, 2000 );
+		DBHelper.save(manager2);
+		Manager manager3 = new Manager("Juno", "myCat", 800000,department1, 4000000 );
+		DBHelper.save(manager3);
 		Engineer engineer1 = new Engineer("Lois", "Griffin", 29000, department1);
 		DBHelper.save(engineer1);
 		Engineer engineer2 = new Engineer("Stewie", "Griffin", 27000, department1);
 		DBHelper.save(engineer2);
+		Engineer engineer3 = new Engineer("Elon", "Musk", 400, department1);
+		DBHelper.save(engineer3);
 	}
 }
